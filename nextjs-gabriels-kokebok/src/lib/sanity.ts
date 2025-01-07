@@ -36,14 +36,3 @@ export async function getRecipeBySlug(slug: string): Promise<Recipe | null> {
   return recipe || null;  // Return null if no recipe is found
 }
 
-// Function to fetch all slugs
-export async function fetchAllSlugs(): Promise<string[]> {
-  const query = `*[_type == "recipe" && defined(slug.current)]{
-    slug
-  }`;
-
-  const result = await client.fetch(query);
-
-  // Map the result to extract slugs
-  return result.map((recipe: { slug: { current: string } }) => recipe.slug.current);
-}

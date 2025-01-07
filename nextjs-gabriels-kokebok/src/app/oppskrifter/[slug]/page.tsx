@@ -6,12 +6,13 @@ import { Share2, Heart, Copy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { MobileIngredients } from '@/components/Mobile-ingredientsButton';
 
-interface RecipePageProps {
-  params: { slug: string };
-}
-
-export default async function RecipePage({ params }: RecipePageProps) {
-  const recipe = await getRecipeBySlug(params.slug);
+export default async function RecipePage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const recipe = await getRecipeBySlug(slug);
 
   if (!recipe) {
     notFound();
