@@ -6,11 +6,11 @@ import { Share2, Heart, Copy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { MobileIngredients } from '@/components/Mobile-ingredientsButton';
 
-export default async function RecipePage({
-  params,
-}: {
+interface RecipePageProps {
   params: { slug: string };
-}) {
+}
+
+export default async function RecipePage({ params }: RecipePageProps) {
   const recipe = await getRecipeBySlug(params.slug);
 
   if (!recipe) {
@@ -51,14 +51,10 @@ export default async function RecipePage({
 
           {/* Title and Description */}
           <h1 className='text-4xl font-bold mb-4'>{recipe.title}</h1>
-          <div className='prose max-w-none mb-4'>
-            <PortableText value={recipe.description} />
-          </div>
-
           {/* Instructions */}
           <div className='prose max-w-none'>
             <h2 className='text-2xl font-semibold mb-4'>Instruksjoner</h2>
-            <PortableText value={recipe.instructions} />
+            <PortableText value={JSON.parse(recipe.instructions)} />
           </div>
         </div>
         {/* Desktop Sidebar */}
@@ -68,18 +64,16 @@ export default async function RecipePage({
 
             {/* Portions */}
             <div className='flex justify-between items-center mb-6 border-t border-b border-dashed border-gray-300 py-4'>
-              <span>{recipe.portions || 4} porsjoner</span>
+              <span>porsjoner</span>
             </div>
 
             {/* Ingredients List */}
             <ul className='space-y-3'>
-              {recipe.ingredients?.map(
-                (ingredient: string[], index: number) => (
-                  <li key={index} className='flex justify-between'>
-                    <span>{ingredient}</span>
-                  </li>
-                )
-              )}
+              {recipe.ingredients?.map((ingredient: string, index: number) => (
+                <li key={index} className='flex justify-between'>
+                  <span>{ingredient}</span>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
@@ -87,7 +81,7 @@ export default async function RecipePage({
 
       {/* Mobile Ingredients Toggle */}
       <MobileIngredients
-        portions={recipe.portions || 4}
+        portions={recipe.portions}
         ingredients={recipe.ingredients || []}
       />
     </div>
