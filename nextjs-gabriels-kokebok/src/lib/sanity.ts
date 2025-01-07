@@ -7,3 +7,16 @@ export function urlForImage(source: any) {
   return builder.image(source)
 }
 
+export async function getRecipeBySlug(slug: string) {
+  return client.fetch(
+    `*[_type == "recipe" && slug.current == $slug][0]{
+      title,
+      slug,
+      mainImage,
+      ingredients,
+      instructions,
+      "author": author->name
+    }`,
+    { slug }
+  )
+}

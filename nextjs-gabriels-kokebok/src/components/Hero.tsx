@@ -51,7 +51,7 @@ export default async function Hero() {
             </p>
             <div className='mt-8'>
               <Button asChild>
-                <Link href='/recipes'>Explore All Recipes</Link>
+                <Link href='/oppskrifter'>Explore All Recipes</Link>
               </Button>
             </div>
           </div>

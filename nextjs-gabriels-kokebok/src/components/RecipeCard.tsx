@@ -18,7 +18,7 @@ export default function RecipeCard({
   views,
 }: RecipeCardProps) {
   return (
-    <Link href={`/recipes/${slug}`}>
+    <Link href={`/oppskrifter/${slug}`}>
       <div className='group relative aspect-square overflow-hidden rounded-3xl bg-gray-100'>
         <Image
           src={urlForImage(mainImage).url()}
