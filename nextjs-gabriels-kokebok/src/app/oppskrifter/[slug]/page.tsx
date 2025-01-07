@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { PortableText } from '@portabletext/react';
 import { Share2, Heart, Copy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { MobileIngredients } from '@/components/Mobile-ingredientsButton';
 
 export default async function RecipePage({
   params,
@@ -60,9 +61,8 @@ export default async function RecipePage({
             <PortableText value={recipe.instructions} />
           </div>
         </div>
-
-        {/* Sidebar */}
-        <div className='lg:col-span-1'>
+        {/* Desktop Sidebar */}
+        <div className='hidden lg:block lg:col-span-1'>
           <div className='bg-gray-50 p-6 rounded-lg sticky top-4'>
             <h2 className='text-xl font-semibold mb-6'>INGREDIENSER</h2>
 
@@ -73,15 +73,23 @@ export default async function RecipePage({
 
             {/* Ingredients List */}
             <ul className='space-y-3'>
-              {recipe.ingredients?.map((ingredient: any, index: number) => (
-                <li key={index} className='flex justify-between'>
-                  <span>{ingredient}</span>
-                </li>
-              ))}
+              {recipe.ingredients?.map(
+                (ingredient: string[], index: number) => (
+                  <li key={index} className='flex justify-between'>
+                    <span>{ingredient}</span>
+                  </li>
+                )
+              )}
             </ul>
           </div>
         </div>
       </div>
+
+      {/* Mobile Ingredients Toggle */}
+      <MobileIngredients
+        portions={recipe.portions || 4}
+        ingredients={recipe.ingredients || []}
+      />
     </div>
   );
 }
