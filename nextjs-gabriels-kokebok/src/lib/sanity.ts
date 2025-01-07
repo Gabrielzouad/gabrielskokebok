@@ -8,19 +8,8 @@ export function urlForImage(source: string){
   return builder.image(source)
 }
 
-// Type for a Recipe
-interface Recipe {
-  portions: number;
-  title: string;
-  slug: { current: string };
-  mainImage: string
-  ingredients: string[];
-  instructions: string;
-  author: string;
-}
-
 // Function to fetch a recipe by its slug
-export async function getRecipeBySlug(slug: string): Promise<Recipe | null> {
+export async function getRecipeBySlug(slug: string) {
   const recipe = await client.fetch(
     `*[_type == "recipe" && slug.current == $slug][0]{
       title,

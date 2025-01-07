@@ -55,7 +55,7 @@ export default async function RecipePage({
           {/* Instructions */}
           <div className='prose max-w-none'>
             <h2 className='text-2xl font-semibold mb-4'>Instruksjoner</h2>
-            <PortableText value={JSON.parse(recipe.instructions)} />
+            <PortableText value={recipe.instructions} />
           </div>
         </div>
         {/* Desktop Sidebar */}
