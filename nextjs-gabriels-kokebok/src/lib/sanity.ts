@@ -4,7 +4,7 @@ import imageUrlBuilder from '@sanity/image-url'
 // Image URL Builder Setup
 const builder = imageUrlBuilder(client)
 
-export function urlForImage(source: { _type: string, asset: { _ref: string } }) {
+export function urlForImage(source: string){
   return builder.image(source)
 }
 
@@ -13,7 +13,7 @@ interface Recipe {
   portions: number;
   title: string;
   slug: { current: string };
-  mainImage: { _type: string, asset: { _ref: string } };
+  mainImage: string
   ingredients: string[];
   instructions: string;
   author: string;
