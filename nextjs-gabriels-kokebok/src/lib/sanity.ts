@@ -20,3 +20,14 @@ export async function getRecipeBySlug(slug: string) {
     { slug }
   )
 }
+
+export async function fetchAllSlugs() {
+  const query = `*[_type == "recipe" && defined(slug.current)]{
+    slug
+  }`;
+
+  const result = await client.fetch(query);
+
+  // Map the result to extract slugs
+  return result.map((recipe: { slug: { current: string } }) => recipe.slug.current);
+}
