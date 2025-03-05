@@ -5,6 +5,7 @@ import './globals.css';
 import { ThemeProvider } from './providers/theme-provider';
 import EnhancedHeader from './components/enhanced-header';
 import DecorativeBackground from './components/decorative-background';
+import { Analytics } from '@vercel/analytics/react';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -24,7 +25,10 @@ export default function RootLayout({
         <ThemeProvider defaultTheme='light'>
           <DecorativeBackground />
           <EnhancedHeader />
-          <main className='min-h-screen'>{children}</main>
+          <main className='min-h-screen'>
+            {children}
+            <Analytics />
+          </main>
           <footer className='bg-muted py-6'>
             <div className='container mx-auto px-4'>
               <div className='flex flex-col md:flex-row justify-between items-center'>
