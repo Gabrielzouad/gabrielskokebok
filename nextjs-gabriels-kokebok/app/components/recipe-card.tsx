@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Clock, Eye } from 'lucide-react';
+import { Clock } from 'lucide-react';
 import { urlForImage } from '@/sanity/lib';
 import type { Recipe } from '@/types/sanity';
 
@@ -15,68 +15,42 @@ interface RecipeCardProps {
 export default function RecipeCard({ recipe }: RecipeCardProps) {
   const [isHovered, setIsHovered] = useState(false);
 
-  const imageUrl = urlForImage(recipe.mainImage).width(600).height(400).url();
+  const imageUrl = urlForImage(recipe.mainImage).width(600).height(600).url();
 
   return (
-    <motion.div
-      className='recipe-card group relative overflow-hidden rounded-xl bg-card shadow-md dark:bg-primary'
-      whileHover={{ y: -5 }}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-    >
-      <div className='relative h-48 w-full overflow-hidden'>
-        <Image
-          src={imageUrl || '/placeholder.svg'}
-          alt={recipe.title}
-          fill
-          className='object-cover transition-transform duration-500 group-hover:scale-110'
-        />
-        <div className='absolute inset-0 bg-gradient-to-t from-black/60 to-transparent' />
-      </div>
-
-      <div className='p-4'>
-        <h3 className='text-xl font-bold line-clamp-1'>{recipe.title}</h3>
-
-        <div className='mt-4 flex items-center justify-between text-sm'>
-          <div className='flex items-center space-x-1'>
-            <Clock className='h-4 w-4 text-muted-foreground' />
-            <span>{recipe.cookingTime} min</span>
-          </div>
-          <div className='flex items-center space-x-1'>
-            <Eye className='h-4 w-4 text-muted-foreground' />
-            <span>{recipe.views} Visninger</span>
-          </div>
+    <Link href={`/oppskrifter/${recipe.slug.current}`}>
+      <motion.div
+        className='group relative overflow-hidden rounded-3xl shadow-md'
+        whileHover={{ y: -5 }}
+        onHoverStart={() => setIsHovered(true)}
+        onHoverEnd={() => setIsHovered(false)}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+      >
+        {/* Image */}
+        <div className='relative h-96 w-full overflow-hidden'>
+          <Image
+            src={imageUrl || '/placeholder.svg'}
+            alt={recipe.title}
+            fill
+            className='object-cover transition-transform duration-500 group-hover:scale-110'
+          />
+          <div className='absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent' />
         </div>
 
-        <motion.div
-          className='mt-4'
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: isHovered ? 1 : 0, y: isHovered ? 0 : 10 }}
-          transition={{ duration: 0.2 }}
-        >
-          <Link href={`/recipes/${recipe.slug.current}`}>
-            <button className='w-full rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90 transition-colors'>
-              Se oppskrift
-            </button>
-          </Link>
-        </motion.div>
-      </div>
+        {/* Content Overlay */}
+        <div className='absolute bottom-0 left-0 right-0 p-4'>
+          <h3 className='text-lg font-semibold text-white leading-snug'>
+            {recipe.title}
+          </h3>
 
-      {/* Decorative elements */}
-      <motion.div
-        className='spoon-decoration'
-        initial={{ opacity: 0, scale: 0 }}
-        animate={{
-          opacity: isHovered ? 0.2 : 0,
-          scale: isHovered ? 1 : 0,
-          x: Math.random() * 100,
-          y: Math.random() * 100,
-        }}
-        transition={{ duration: 0.5 }}
-      />
-    </motion.div>
+          <div className='mt-2 flex items-center text-sm text-gray-200'>
+            <Clock className='h-4 w-4 mr-1' />
+            <span>{recipe.cookingTime} min</span>
+          </div>
+        </div>
+      </motion.div>
+    </Link>
   );
 }

@@ -1,10 +1,10 @@
-import imageUrlBuilder from "@sanity/image-url";
-import { createClient } from "next-sanity";
+import imageUrlBuilder from '@sanity/image-url';
+import { createClient } from 'next-sanity';
 
 const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "ajb4bzi3",
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || "production",
-  apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION || "2024-01-01",
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'ajb4bzi3',
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+  apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-01-01',
   useCdn: false, // Ensures fresh data when needed
 });
 
@@ -31,7 +31,7 @@ export async function getRecipes() {
     );
     return recipes || [];
   } catch (error) {
-    console.error("Error fetching recipes:", error);
+    console.error('Error fetching recipes:', error);
     return [];
   }
 }
@@ -69,4 +69,29 @@ export async function getHeroImage() {
   );
 
   return hero || {}; // Ensure it never returns undefined
+}
+
+// ✅ Fetch Recipes by Category (stale-while-revalidate)
+export async function getrecipesByCategory(categorySlug: string) {
+  try {
+    const recipes = await client.fetch(
+      `*[_type == "recipe" && category->slug.current == $categorySlug]{
+        _id,
+        title,
+        slug,
+        mainImage,
+        cookingTime,
+        views
+      }`,
+      { categorySlug },
+      { next: { revalidate: 0 } } // Stale-while-revalidate behavior
+    );
+    return recipes || [];
+  } catch (error) {
+    console.error(
+      `Error fetching recipes for category ${categorySlug}:`,
+      error
+    );
+    return [];
+  }
 }

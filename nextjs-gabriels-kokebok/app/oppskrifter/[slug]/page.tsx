@@ -4,9 +4,22 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, Clock, Printer, Share2, Bookmark } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { PortableText } from '@portabletext/react';
+import { PortableText, PortableTextComponents } from '@portabletext/react';
 import { urlForImage } from '@/sanity/lib';
+
+const instructionComponents: PortableTextComponents = {
+  block: {
+    normal: ({ children }) => (
+      <li className='mb-2'>{children}</li> // each paragraph becomes a list item
+    ),
+  },
+  list: {
+    bullet: ({ children }) => <ul className='list-disc pl-6'>{children}</ul>,
+    number: ({ children }) => (
+      <ol className='list-decimal pl-6 space-y-2'>{children}</ol>
+    ),
+  },
+};
 
 export default async function RecipeDetail({
   params,
@@ -23,9 +36,10 @@ export default async function RecipeDetail({
 
   return (
     <div className='container mx-auto px-4 py-8 animate-fade-in'>
+      {/* Back button */}
       <div className='mb-6'>
         <Link
-          href='/recipes'
+          href='/oppskrifter'
           className='inline-flex items-center text-muted-foreground hover:text-primary transition-colors'
         >
           <ArrowLeft className='mr-2 h-4 w-4' />
@@ -34,6 +48,7 @@ export default async function RecipeDetail({
       </div>
 
       <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
+        {/* Left: title, image, instructions */}
         <div className='lg:col-span-2'>
           <h1 className='text-3xl md:text-4xl font-bold mb-4'>
             {recipe.title}
@@ -75,56 +90,36 @@ export default async function RecipeDetail({
 
           <div className='flex items-center mb-6'>
             <Clock className='h-5 w-5 text-muted-foreground mr-2' />
-            <span>Cooking Time: {recipe.cookingTime} minutes</span>
+            <span>{recipe.cookingTime} minutter</span>
           </div>
 
-          <Tabs defaultValue='instructions'>
-            <TabsList className='w-full'>
-              <TabsTrigger value='instructions' className='flex-1'>
-                Instrukser
-              </TabsTrigger>
-              <TabsTrigger value='ingredients' className='flex-1'>
-                Ingredisener
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value='instructions' className='pt-6'>
-              <div className='prose prose-stone dark:prose-invert max-w-none'>
-                <PortableText value={recipe.instructions} />
-              </div>
-            </TabsContent>
-
-            <TabsContent value='ingredients' className='pt-6'>
-              <ul className='space-y-2'>
-                {recipe.ingredients &&
-                  recipe.ingredients.map(
-                    (ingredient: string, index: number) => (
-                      <li
-                        key={index}
-                        className='ingredient-item flex items-center p-2 rounded-md'
-                      >
-                        <div className='w-2 h-2 rounded-full bg-primary mr-3'></div>
-                        <p>{ingredient}</p>
-                      </li>
-                    )
-                  )}
-              </ul>
-            </TabsContent>
-          </Tabs>
+          {/* Instructions as a numbered list */}
+          <div>
+            <h2 className='text-2xl font-semibold mb-4'>Instrukser</h2>
+            <ol className='list-decimal pl-6 space-y-3 text-lg leading-relaxed'>
+              <PortableText
+                value={recipe.instructions}
+                components={instructionComponents}
+              />
+            </ol>
+          </div>
         </div>
 
+        {/* Right: ingredients */}
         <div className='lg:col-span-1'>
-          <div className='bg-card rounded-xl p-6 shadow-sm mb-8'>
-            <div className='flex items-center mb-4'>
-              <div className='w-12 h-12 rounded-full bg-muted overflow-hidden mr-3 flex items-center justify-center'>
-                <span className='text-lg font-bold'>
-                  {recipe.author?.charAt(0) || 'C'}
-                </span>
-              </div>
-              <div>
-                <p className='font-medium'>{recipe.author || 'Chef'}</p>
-              </div>
-            </div>
+          <div className='bg-card rounded-xl p-6 shadow-sm'>
+            <h2 className='text-xl font-semibold mb-4'>Ingredienser</h2>
+            <ul className='space-y-2'>
+              {recipe.ingredients?.map((ingredient: string, index: number) => (
+                <li
+                  key={index}
+                  className='ingredient-item flex items-center p-2 rounded-md'
+                >
+                  <div className='w-2 h-2 rounded-full bg-primary mr-3'></div>
+                  <p>{ingredient}</p>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </div>

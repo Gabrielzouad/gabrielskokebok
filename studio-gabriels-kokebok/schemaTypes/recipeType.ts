@@ -25,9 +25,7 @@ export default defineType({
       name: 'mainImage',
       title: 'Main Image',
       type: 'image',
-      options: {
-        hotspot: true,
-      },
+      options: { hotspot: true },
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -35,12 +33,6 @@ export default defineType({
       title: 'Cooking Time (in minutes)',
       type: 'number',
       validation: (Rule) => Rule.required().min(1),
-    }),
-    defineField({
-      name: 'views',
-      title: 'View Count',
-      type: 'number',
-      initialValue: 0,
     }),
     defineField({
       name: 'ingredients',
@@ -54,6 +46,12 @@ export default defineType({
       type: 'array',
       of: [{ type: 'block' }],
     }),
+    defineField({
+      name: 'category',
+      title: 'Category',
+      type: 'reference',
+      to: [{ type: 'category' }],
+      validation: (Rule) => Rule.required(),
+    }),
   ],
 })
-

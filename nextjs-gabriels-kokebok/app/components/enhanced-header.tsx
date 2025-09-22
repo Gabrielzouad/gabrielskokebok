@@ -27,8 +27,8 @@ export default function EnhancedHeader() {
   }, []);
 
   const navItems = [
-    { name: 'Home', href: '/' },
-    { name: 'Recipes', href: '/recipes' },
+    { name: 'Middag', href: '/middag' },
+    { name: 'Oppskrifter', href: '/oppskrifter' },
   ];
 
   return (
